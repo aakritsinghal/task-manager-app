@@ -8,6 +8,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.os.Build;
+import android.app.PendingIntent;
+import android.content.Intent;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -48,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Enter a task", Toast.LENGTH_SHORT).show();
             }
         });
+
+        createNotificationChannel();
     }
 
     private void loadTasks() {
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
             databaseRef.child(taskId).setValue(task).addOnCompleteListener(task1 -> {
                 if (task1.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Task added!", Toast.LENGTH_SHORT).show();
+                    showNotification(task);
                 } else {
                     Toast.makeText(MainActivity.this, "Failed to add task", Toast.LENGTH_SHORT).show();
                 }
@@ -108,4 +120,44 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channelId = "task_notifications";
+            CharSequence name = "Task Notifications";
+            String description = "Notifications for task updates";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
+            channel.setDescription(description);
+
+            // Register the channel with the system
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showNotification(String taskName) {
+        String channelId = "task_notifications";
+        int notificationId = (int) System.currentTimeMillis(); // Unique ID for each notification
+
+        // Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app icon
+                .setContentTitle("New Task Added")
+                .setContentText("Task: " + taskName)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true); // Remove notification when tapped
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+        // Show the notification
+        notificationManager.notify(notificationId, builder.build());
+    }
+
+
 }
