@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app icon
-                .setContentTitle("New Task Added")
+                .setContentTitle("You have recently added a New Task")
                 .setContentText("Task: " + taskName)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
