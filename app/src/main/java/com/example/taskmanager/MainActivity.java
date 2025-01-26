@@ -123,16 +123,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Channel ID and attributes
             String channelId = "task_notifications";
-            CharSequence name = "Task Notifications";
-            String description = "Notifications for task updates";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(channelId, name, importance);
-            channel.setDescription(description);
-
-            // Register the channel with the system
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            NotificationChannel channel = new NotificationChannel(
+                    channelId,
+                    "Task Notifications",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription("Notifications for task updates");
+    
+            // Register the channel
+            NotificationManager notificationManager = 
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 
