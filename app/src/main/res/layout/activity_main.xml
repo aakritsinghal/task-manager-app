@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Input Field for Tasks -->
+    <EditText
+        android:id="@+id/et_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a task"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Button to Add Task -->
+    <Button
+        android:id="@+id/btn_add_task"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Task"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- TextView to Display Tasks -->
+    <TextView
+        android:id="@+id/tv_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tasks:"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Scrollable Layout for Task List -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_task_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+    </ScrollView>
+</LinearLayout>
